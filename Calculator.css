@@ -44,3 +44,7 @@ button:active{
     transform: scale(0.95);
 }
 /* if input field => pointer-event: none; */
+
+.operator{
+    color: rgb(97, 97, 201);
+}
