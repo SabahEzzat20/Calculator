@@ -1,11 +1,39 @@
-let button = document.querySelectorAll('button');
-let operationContainer = document.querySelector('.operationContainer')
+let buttons = document.querySelectorAll('button');
+let operationContainer = document.querySelector('.operationContainer');
+let operatorBtns = document.querySelectorAll('.operator');
+
 let specialCharacters = ['%', '*', '/', '+', '-'];
-button.forEach(btn => {
+
+buttons.forEach(btn => {
+    btn.style.color = 'rgb(54, 54, 54)';
+
+    // Handle mouseover and mouseout
+    btn.addEventListener('mouseover', function () {
+        btn.style.backgroundColor = 'rgb(97, 97, 201)';
+        btn.style.color = 'white';
+    });
+
+    btn.addEventListener('mouseout', function () {
+        btn.style.backgroundColor = '#F0F0F0';
+
+        // Check if the button is an operator and set its color back
+        if (btn.classList.contains('operator')) {
+            btn.style.color = 'rgb(97, 97, 201)';
+        } else {
+            btn.style.color = 'rgb(54, 54, 54)';
+        }
+    });
+
     btn.addEventListener('click', function (e) {
         handleButtonClick(btn.innerHTML);
-    })
-})
+    });
+});
+
+// Set initial color for operator buttons
+operatorBtns.forEach(operator => {
+    operator.style.color = 'rgb(97, 97, 201)';
+});
+
 
 
 const clearOperation = () => {
@@ -17,7 +45,8 @@ const deleteLastCharacter = () => {
     operationContainer.innerHTML = operation.join('');
 }
 const calculateResult = () => {
-    operationContainer.innerHTML = eval(operationContainer.innerHTML);
+    let result = eval(operationContainer.innerHTML);
+    Number.isInteger(result) ? operationContainer.innerHTML = result : operationContainer.innerHTML = result.toFixed(3);
 }
 const isEmpty = (input) => {
     return input === '';
@@ -26,13 +55,15 @@ const isSpecialCharacter = (value) => {
     return specialCharacters.includes(value);
 }
 const appendToOperation = (value) => {
-    if (isSpecialCharacter(value) && operationContainer.innerHTML === '') {
+    if (operationContainer.innerHTML === '' && isSpecialCharacter(value)) {
         return;
-    } else {
-        if(!checkOperator(value))
-            operationContainer.innerHTML += value;
+    }
+    if (!checkOperator(value)) {
+        operationContainer.innerHTML += value;
+        
     }
 }
+
 const checkOperator = (value) => {
     return (specialCharacters.includes(value) && specialCharacters.includes(operationContainer.innerHTML.slice(-1)))
 }
@@ -52,5 +83,3 @@ const handleButtonClick = (value) => {
             // break;
     }
 }
-
-
